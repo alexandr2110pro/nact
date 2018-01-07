@@ -34,9 +34,18 @@ describe('#serialize()', function () {
 });
 
 describe('#writeManifest()', function () {
-  it('should be correctly create the manifest and serialize it', async function () {
-    const expectedResult = { system: { name: 'test' }, transport: { type: 'random' } };
-    let result = await readManifest(writeManifest({ name: 'test' }, { type: 'random' }));
+  it('should be correctly write the manifest', async function () {
+    const expectedResult = { n: 'test', t: { t: 'random', a: 123 } };
+    let result = await deserialize(writeManifest({ name: 'test' }, { type: 'random', a: 123 }));
+    result.should.deep.equal(expectedResult);
+  });
+});
+
+describe('#readManifest()', function () {
+  it('should be correctly read the manifest', async function () {
+    const input = serialize({ n: 'test', t: { t: 'random', a: 123 } });
+    const expectedResult = { system: { name: 'test' }, transport: { type: 'random', a: 123 } };
+    let result = await readManifest(input);
     result.should.deep.equal(expectedResult);
   });
 });
