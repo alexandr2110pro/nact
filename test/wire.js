@@ -4,7 +4,7 @@ const chai = require('chai');
 const msgpack = require('msgpack5')();
 const zlib = require('zlib');
 chai.should();
-const { deserialize, serialize, writeManifest } = require('../lib/wire');
+const { deserialize, serialize, writeManifest, readManifest } = require('../lib/wire');
 
 describe('#deserialize()', function () {
   it('should be able to deserialize previously serialized data', async function () {
@@ -36,8 +36,7 @@ describe('#serialize()', function () {
 describe('#writeManifest()', function () {
   it('should be correctly create the manifest and serialize it', async function () {
     const expectedResult = { system: { name: 'test' }, transport: { type: 'random' } };
-    let input = writeManifest({ name: 'test' }, { type: 'random' });
-    let result = await deserialize(input);
+    let result = await readManifest(writeManifest({ name: 'test' }, { type: 'random' }));
     result.should.deep.equal(expectedResult);
   });
 });
